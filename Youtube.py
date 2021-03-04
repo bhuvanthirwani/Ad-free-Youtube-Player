@@ -195,6 +195,8 @@ while True:
                         window['-VIDEO_LOCATION-'].update(que1)
                     list_player.play()  
         window.close()
+        break
+
     if(event=='Mouse'):
         window1.close()
         def btn(name):  # a PySimpleGUI "User Defined Element" (see docs)
@@ -216,6 +218,7 @@ while True:
         window.Element('-VIDEO_LOCATION-').focus=True
         window.Element('-VIDEO_LOCATION-').SetFocus()
         window['-VID_OUT-'].expand(True, True)                # type: sg.Element
+
         #------------ Media Player Setup ---------#
 
         inst = vlc.Instance()
@@ -229,7 +232,7 @@ while True:
         else:
             player.set_hwnd(window['-VID_OUT-'].Widget.winfo_id())
         link=''
-        que=' '
+        que=' '
         #------------ The Event Loop ------------#
         while True:
             event, values = window.read(timeout=1000)       # run with a timeout so that current location can be updated
@@ -282,6 +285,8 @@ while True:
             else:
 
                 window['-MESSAGE_AREA-'].update('Load media to start' if media_list.count() == 0 else 'Ready to play media' )
+
         window.close()
+        break
     if(event == sg.WIN_CLOSED):
         break
