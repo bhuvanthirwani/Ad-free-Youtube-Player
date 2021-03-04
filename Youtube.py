@@ -167,17 +167,34 @@ while True:
                 continue
             if ((search.find("play") != -1) or (search.find("pause") != -1) or (search.find("stop") != -1) or (search.find("mute") != -1)):
                 continue
+            txt = search
+            query = ""
+            txt = txt.strip()
+            if len(txt)>7:
+                res = txt.find("search")
+                if res == 0:
+                    que = txt[7:]
+                    que1=que
+                    que = que.replace(" ", "+")
+                    searchlink = "https://www.youtube.com/results?search_query="+que
+                    #WEB SCRAPING
+                    html = urllib.request.urlopen(searchlink)
+                    video_ids = re.findall(r"watch\?v=(\S{11})", html.read().decode())
+                    link="https://www.youtube.com/watch?v=" + video_ids[0]
+                    values['-VIDEO_LOCATION-']=link
 
-            if values['-VIDEO_LOCATION-'] and not 'Video URL' in values['-VIDEO_LOCATION-']:
-                a = values['-VIDEO_LOCATION-']
-                if(media_list.count()==1):
-                    media_list.remove_index(0)
-                media_list.add_media(values['-VIDEO_LOCATION-'])
-                list_player.set_media_list(media_list)
-                window['-VIDEO_LOCATION-'].update(que1)
-            list_player.play()  
+                    list_player.stop()
+                    player.stop()
+                    get_subtitles(link)
+                    if values['-VIDEO_LOCATION-'] and not 'Video URL' in values['-VIDEO_LOCATION-']:
+                        a = values['-VIDEO_LOCATION-']
+                        if(media_list.count()==1):
+                            media_list.remove_index(0)
+                        media_list.add_media(values['-VIDEO_LOCATION-'])
+                        list_player.set_media_list(media_list)
+                        window['-VIDEO_LOCATION-'].update(que1)
+                    list_player.play()  
         window.close()
-    
     if(event=='Mouse'):
         window1.close()
         def btn(name):  # a PySimpleGUI "User Defined Element" (see docs)
@@ -242,12 +259,21 @@ while True:
             if event == 'load':
                 list_player.stop()
                 player.stop()
-
-                if(media_list.count()==1):
-                    media_list.remove_index(0)
-                media_list.add_media(values['-VIDEO_LOCATION-'])
-                list_player.set_media_list(media_list)
-
+                if values['-VIDEO_LOCATION-'] and not 'Video URL' in values['-VIDEO_LOCATION-']:
+                    que = values['-VIDEO_LOCATION-']
+                    
+                    que1 = que.replace(" ", "+")
+                    searchlink = "https://www.youtube.com/results?search_query="+que1
+                    #WEB SCRAPING
+                    html = urllib.request.urlopen(searchlink)
+                    video_ids = re.findall(r"watch\?v=(\S{11})", html.read().decode())
+                    link="https://www.youtube.com/watch?v=" + video_ids[0]
+                    values['-VIDEO_LOCATION-']=link
+                    if(media_list.count()==1):
+                        media_list.remove_index(0)
+                    media_list.add_media(values['-VIDEO_LOCATION-'])
+                    list_player.set_media_list(media_list)
+                    
                     window['-VIDEO_LOCATION-'].update(que) # only add a legit submit
                 get_subtitles(link)
             if player.is_playing():
@@ -256,7 +282,6 @@ while True:
             else:
 
                 window['-MESSAGE_AREA-'].update('Load media to start' if media_list.count() == 0 else 'Ready to play media' )
-
         window.close()
     if(event == sg.WIN_CLOSED):
         break
