@@ -1,56 +1,92 @@
-import speech_recognition as sr
-import random
-import pyautogui as p
-import pyttsx3
-print("A VERY BASIC SPEECH RECOGNITION GAME BASED ON ADDITION ")
-engine = pyttsx3.init("sapi5")# TSS Engine, sapi5 - SAPI5 on Windows, #nsss - NSSpeechSynthesizer on Mac OS X, #espeak - eSpeak on every other platform
-r = sr.Recognizer()# object for voice recognization
-s=" "
-count = 0
-while(s!="exit"):
-    print("Running")
-    engine.say("Say Something") 
-    engine.say("Next Word")
-        engine.runAndWait()
-    with sr.Microphone() as source:
-        try:
-            print(count)
-            count+=1
-            r.adjust_for_ambient_noise(source)
-            print("Say your command...")
-            audio = r.listen(source,timeout=10)
-            print("Recognizing your voice...")
-            text = r.recognize_google(audio)# USES GOOGLE API
-            s=text
-            print(text)
-            text=text.lower()
-            if(text=="t" or text=="T"):
-                p.hotkey('ctrl', 't')
-            elif(text=="play"):
-                p.press("space")
-            elif(text=="stop"):
-                p.press("space")
-            elif(text=="next"):
-                p.press("right")
-            elif(text=="back" ):
-                p.press("left")
-            elif(text=="full"):
-                p.press("f")
-            elif(text=="mini"):
-                p.press("i")
-            elif(text=="mute"):
-                p.press("m")
-            elif(text=="unmute"):
-                p.press("m")
-            elif(text=="subtitles"):
-                p.press("c")
-            elif(text=="cinema"):
-                p.press("t")
-            elif(text=="exit" or text=="end"):
-                break
-            else:
-                print("Say again...")
-            print("**********")
-            print("I heard this ", text)
-        except:
-            print("----------------------------------- ")
+import PySimpleGUI as sg
+import vlc
+from sys import platform as PLATFORM
+
+#------- GUI definition & setup --------#
+
+sg.theme('DarkBlue')
+
+def btn(name):  # a PySimpleGUI "User Defined Element" (see docs)
+    return sg.Button(name, size=(6, 1), pad=(1, 1))
+
+layout = [[sg.Input(default_text='', size=(30, 1), key='-VIDEO_LOCATION-'), sg.Button('load')],
+          [sg.Image('', size=(300, 170), key='-VID_OUT-')],
+          [btn('play'), btn('pause'), btn('stop')],
+          [sg.Text('Load media to start', key='-MESSAGE_AREA-')]]
+
+window = sg.Window('Mini Player', layout, element_justification='center', finalize=True, resizable=True, keep_on_top = True)
+window.Normal()
+#window.Maximize()
+window.Minimize()
+window.Normal()
+window.TKroot.focus_force()
+window.Element('-VIDEO_LOCATION-').focus=True
+window.Element('-VIDEO_LOCATION-').SetFocus()
+window['-VID_OUT-'].expand(True, True)                # type: sg.Element
+#------------ Media Player Setup ---------#
+
+inst = vlc.Instance()
+list_player = inst.media_list_player_new()
+media_list = inst.media_list_new([])
+list_player.set_media_list(media_list)
+player = list_player.get_media_player()
+if PLATFORM.startswith('linux'):
+    player.set_xwindow(window['-VID_OUT-'].Widget.winfo_id())
+else:
+    player.set_hwnd(window['-VID_OUT-'].Widget.winfo_id())
+
+#------------ The Event Loop ------------#
+while True:
+    event, values = window.read(timeout=1000)       # run with a timeout so that current location can be updated
+    if len(values) == 0:
+        link = ''
+        continue
+    elif values['-VIDEO_LOCATION-'] != '':
+        link = values['-VIDEO_LOCATION-']
+    else:
+        link = ''
+        
+    #print(type(values))
+    #print(values)
+    if event == sg.WIN_CLOSED:
+        list_player.pause()
+        list_player.stop()
+        break
+    if event == 'play':
+        list_player.play()
+    if event == 'pause':
+        list_player.pause()
+    if event == 'stop':
+        list_player.stop()
+    if event == 'next':
+        list_player.next()
+        list_player.play()
+    if event == 'previous':
+        list_player.previous()      # first call causes current video to start over
+        list_player.previous()      # second call moves back 1 video from current
+        list_player.play()
+    if event == 'load':
+        list_player.stop()
+        if values['-VIDEO_LOCATION-'] and not 'Video URL' in values['-VIDEO_LOCATION-']:
+            a = values['-VIDEO_LOCATION-']
+            if(media_list.count()==1):
+                media_list.remove_index(0)
+            media_list.add_media(values['-VIDEO_LOCATION-'])
+            list_player.set_media_list(media_list)
+            window['-VIDEO_LOCATION-'].update(link) # only add a legit submit
+            #print(media_list)
+    #print(media_list)
+    #print(player.is_playing())
+    #print("MedialistCount------",media_list.count())
+    #for i in media_list:
+        #print("Hello----",i,end=" ")
+    # update elapsed time if there is a video loaded and the player is playing
+    if player.is_playing():
+        window['-MESSAGE_AREA-'].update("{:02d}:{:02d} / {:02d}:{:02d}".format(*divmod(player.get_time()//1000, 60),
+                                                                     *divmod(player.get_length()//1000, 60)))
+    else:
+        
+        window['-MESSAGE_AREA-'].update('Load media to start' if media_list.count() == 0 else 'Ready to play media' )
+
+window.close()
+print(type(values))
