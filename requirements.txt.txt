@@ -1,0 +1,11 @@
+urllib3
+regex
+pytube
+vlc
+PySimpleGUI
+sys
+speech_recognition
+playsound2
+gTTS
+os
+pyaudio
