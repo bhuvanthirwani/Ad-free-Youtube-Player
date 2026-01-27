@@ -1,33 +1,79 @@
-# Ad-free YouTube Player
+# 📺 Ad-free YouTube Player
 
-<p>YouTube is a widely used online platform which streams videos as asked by the user. After the input given by the user, it shows a list of videos from most relevant to least
-relevant. Our model aims to integrate this task with the Vision as well as Audition modalities, that is, user can search using keyboard or through voice, and hence can stream ad-free videos. We have implemented this approach by building an interactive GUI application to play the requested video.<br></p>
+> **A Voice-Controlled Desktop YouTube Player**
 
-<p>The novelty of our proposed project is that the user need not open the YouTube platform explicitly. The GUI Application provides advertisement free streaming and an option to download the loaded video. These additional features help enhance the user experience further.</p>
+This desktop application allows you to search, watch, and control YouTube videos without ads using a clean Python interface. It features **Voice Control** and **Mouse Control** modes, letting you operate the player with simple voice commands or standard clicks.
 
-## GUI Application
-<p>A Python GUI application is like a VLC player for YouTube running in pip mode. It can be minimized, maximized or run in movie mode just like YouTube. Also, the GUI application will have most of the functionalities just like the one in YouTube. As a general flow, when the GUI application is started, it asks for the user’s choice, if he/she wants to interact with ”Voice” or ”Mouse”. Then, according to the preference given, it provides an ad-free streaming of the YouTube videos.</p>
+---
 
-### Mouse Based
-<p>When the user opts for a Mouse Based interface, he/she needs to type the query in the search box. Clicking on <em>load</em> button will open the most relevant video related to the search term within the application. The model obtains the YouTube link of this relevant video through the process of Web Scraping. It is the process of extracting content and data from a website. We have used the concept of regular expressions in order to implement this process.</p>
-<p>After getting the URL of the requested video, the model loads the video on the application and makes it ready to be controlled by the user. Now, the user can perform various clicks shown on the application in order to control the video:<br>
-  1. <em>Play</em>: plays the video.<br>
-  2. <em>Pause</em>: pauses the video.<br>
-  3. <em>Mute</em>: mutes the video or makes its volume 0.<br>
-  4. <em>Subtitles</em>: enables subtitles for the video if they are present.<br>
-  5. <em>Stop</em>: stops the video and exits the interface.<br>
-  6. <em>Download</em>: downloads the video.<br></p>
-<p>Apart from these, the user can control the size of the video by choosing the Full screen (shown by maximise button) or Minimise screen (shown by minimise button) or Normal screen (restores the original size) or Cancel screen (shown by cross mark) options from the Title bar of the application.</p>
+## 🛠 Tech Stack
 
-### Voice Based
-<p>When the user opts for a Voice Based interface, he/she needs to give the search term, for example train, by saying <em>search train</em>. The model confirms the voice command by saying <em>I heard train</em>. It then performs Web Scraping at the back-end similar to the Mouse-based approach. It extracts and loads the link of the most relevant video related to the search term on the application. Now, the user can control the video through various voice commands listed below:<br>
-  1. <em>Play</em>: plays the video.<br>
-  2. <em>Pause</em>: pauses the video.<br>
-  3. <em>Mute</em>: mutes the video or makes its volume 0.<br>
-  4. <em>Unmute</em>: unmutes the video.<br>
-  5. <em>Subtitles</em>: enables subtitles for the video if they are present.<br>
-  6. <em>Full Screen</em>: continues commands in full screen.<br>
-  7. <em>Minimise</em>: continues commands in mini version.<br>
-  8. <em>Normal</em>: restores original size and continue commands.<br>
-  9. <em>Download</em>: downloads the video.<br>
-  10. <em>Exit</em>: stops the video and exits the interface.<br>
+| Category | Technologies |
+| :--- | :--- |
+| **GUI** | ![PySimpleGUI](https://img.shields.io/badge/PySimpleGUI-GUI-blue?style=flat&logo=python&logoColor=white) |
+| **Media Engine** | ![VLC](https://img.shields.io/badge/VLC-LibVLC-orange?style=flat&logo=vlc&logoColor=white) |
+| **Voice & Audio** | ![SpeechRecognition](https://img.shields.io/badge/SpeechRecognition-API-green?style=flat) ![gTTS](https://img.shields.io/badge/gTTS-Google_TTS-yellow?style=flat&logo=google&logoColor=white) |
+| **YouTube Tools** | ![Pytube](https://img.shields.io/badge/Pytube-Downloader-red?style=flat&logo=youtube&logoColor=white) |
+
+---
+
+## 🚀 Key Features
+
+-   **🚫 Ad-Free Experience**: Streams videos directly without interrupting ads.
+-   **🗣️ Voice Control Mode**:
+    -   Search videos by voice: *"Search funny cats"*
+    -   Playback controls: *"Play"*, *"Pause"*, *"Stop"*
+    -   Volume controls: *"Mute"*, *"Unmute"*
+    -   Window controls: *"Full screen"*, *"Minimize"*
+-   **🖱️ Mouse Control Mode**: Standard graphical interface for typing searches and clicking buttons.
+-   **📥 Video Downloader**: Download your favorite videos directly to your machine.
+-   **📝 Subtitles**: Fetch and display English subtitles automatically.
+
+---
+
+## 🎥 Demo Video
+
+> **[Watch the Demo Video](https://drive.google.com/file/d/1Bwd2yTlz0-6Vkh3Kjr6Ms-jOeDwnHOfL/view?usp=sharing)**
+
+---
+
+## 📦 Installation & Setup
+
+### Prerequisites
+1.  **Python 3.x**
+2.  **VLC Media Player**: Must be installed on your system (bits should match your Python version, e.g., 64-bit Python -> 64-bit VLC).
+
+### Steps
+
+1.  **Clone the repository**
+    ```bash
+    git clone https://github.com/yourusername/Ad-free-Youtube-Player.git
+    cd Ad-free-Youtube-Player
+    ```
+
+2.  **Install Dependencies**
+    ```bash
+    pip install -r requirements.txt
+    ```
+
+3.  **Run the Application**
+    ```bash
+    python Youtube.py
+    ```
+
+---
+
+## 🗣️ Voice Commands Guide
+
+| Command | Action |
+| :--- | :--- |
+| **"Search [query]"** | Searches YouTube and plays the first result. |
+| **"Play" / "Pause"** | Resumes or pauses the video. |
+| **"Download"** | Downloads the current video as MP4. |
+| **"Subtitle"** | Enabling subtitles (if available). |
+| **"Full Screen"** | Maximizes the player window. |
+| **"Exit"** | Closes the application. |
+
+---
+
+*Experience YouTube your way—hands-free and ad-free.*
